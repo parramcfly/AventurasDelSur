@@ -1,0 +1,16 @@
+venv/
+env/
+
+__pycache__/
+*.py[cod]
+
+*.log
+db.sqlite3
+
+.env
+aventuras_sur.sql
+
+.vscode/
+
+.DS_Store
+Thumbs.db

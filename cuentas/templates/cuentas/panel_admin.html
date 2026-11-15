@@ -1,0 +1,52 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel Administrador</title>
+    <link rel="stylesheet" href="{% static 'cuentas/css/panel.css' %}">
+</head>
+<body>
+
+    <div class="barra">
+        <h2>Aventuras del Sur</h2>
+        <a href="{% url 'logout' %}">Cerrar sesion</a>
+    </div>
+
+    <div class="contenido">
+
+        <span class="etiqueta">ADMINISTRACION</span>
+
+        <h1>Bienvenido, Administrador</h1>
+
+        <p>Desde aqui puedes gestionar el funcionamiento del ecoparque.</p>
+
+        <div class="tarjetas">
+
+            <div class="tarjeta">
+                <h3>Usuarios</h3>
+                <p>Gestion de usuarios y perfiles.</p>
+            </div>
+
+            <a href="{% url 'listar_categorias' %}" class="tarjeta enlace-tarjeta">
+                <h3>Categorias</h3>
+                <p>Administracion de categorias.</p>
+            </a>
+
+            <a href="{% url 'listar_experiencias' %}" class="tarjeta enlace-tarjeta">
+                <h3>Experiencias</h3>
+                <p>Gestion de todas las actividades.</p>
+            </a>
+
+            <a href="{% url 'listar_inscripciones' %}" class="tarjeta enlace-tarjeta">
+                <h3>Reservas</h3>
+                <p>Consulta de inscripciones.</p>
+            </a>
+
+        </div>
+
+    </div>
+
+</body>
+</html>

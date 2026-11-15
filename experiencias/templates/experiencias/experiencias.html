@@ -1,0 +1,172 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Experiencias | Aventuras del Sur</title>
+
+    <link rel="stylesheet" href="{% static 'cuentas/css/panel.css' %}">
+
+    <!-- DataTables -->
+    <link rel="stylesheet"
+        href="https://cdn.datatables.net/1.13.8/css/jquery.dataTables.min.css">
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
+</head>
+
+<body>
+
+    <div class="barra">
+        <h2>Aventuras del Sur</h2>
+
+        {% if rol == 'admin' %}
+            <a href="{% url 'panel_admin' %}">Volver al panel</a>
+        {% elif rol == 'guia' %}
+            <a href="{% url 'panel_guia' %}">Volver al panel</a>
+        {% else %}
+            <a href="{% url 'panel_turista' %}">Volver al panel</a>
+        {% endif %}
+    </div>
+
+    <div class="contenido">
+
+        <span class="etiqueta">ECOPARQUE Y RESERVA NATURAL</span>
+
+        <h1>Gestion de experiencias</h1>
+
+        <p>Consulta las actividades disponibles en Aventuras del Sur.</p>
+
+        {% if rol == 'admin' or rol == 'guia' %}
+            <a href="{% url 'crear_experiencia' %}" class="boton-crear">
+                + Nueva experiencia
+            </a>
+        {% endif %}
+
+        {% if messages %}
+            {% for mensaje in messages %}
+                <p class="mensaje">{{ mensaje }}</p>
+            {% endfor %}
+        {% endif %}
+
+        {% if experiencias %}
+
+            <table id="tablaExperiencias">
+
+                <thead>
+                    <tr>
+                        <th>Titulo</th>
+                        <th>Categoria</th>
+                        <th>Precio</th>
+                        <th>Cupos</th>
+                        <th>Fecha</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for experiencia in experiencias %}
+
+                        <tr>
+
+                            <td>{{ experiencia.titulo }}</td>
+
+                            <td>{{ experiencia.categoria.nombre }}</td>
+
+                            <td data-order="{{ experiencia.precio }}">
+                                ${{ experiencia.precio }}
+                            </td>
+
+                            <td>{{ experiencia.cupo_maximo }}</td>
+
+                            <td data-order="{{ experiencia.fecha_hora|date:'Y-m-d H:i:s' }}">
+                                {{ experiencia.fecha_hora|date:"d/m/Y H:i" }}
+                            </td>
+
+                            <td>{{ experiencia.get_estado_display }}</td>
+
+                            <td>
+
+                                {% if rol == 'turista' %}
+
+                                    <form method="POST"
+                                          action="{% url 'inscribirse' experiencia.id %}">
+
+                                        {% csrf_token %}
+
+                                        <button type="submit">
+                                            Inscribirme
+                                        </button>
+
+                                    </form>
+
+                                {% endif %}
+
+                                {% if rol == 'admin' or rol == 'guia' %}
+
+                                    <a href="{% url 'editar_experiencia' experiencia.id %}">
+                                        Editar
+                                    </a>
+
+                                {% endif %}
+
+                                {% if rol == 'admin' %}
+
+                                    <form method="POST"
+                                        action="{% url 'eliminar_experiencia' experiencia.id %}"
+                                        onsubmit="return confirm('¿Deseas eliminar esta experiencia?')">
+
+                                        {% csrf_token %}
+
+                                        <button type="submit">
+                                            Eliminar
+                                        </button>
+
+                                    </form>
+
+                                {% endif %}
+
+                            </td>
+
+                        </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        {% else %}
+
+            <p>No hay experiencias registradas.</p>
+
+        {% endif %}
+
+    </div>
+
+    <script>
+        $(document).ready(function() {
+
+            $('#tablaExperiencias').DataTable({
+
+                language: {
+                    url: "https://cdn.datatables.net/plug-ins/1.13.8/i18n/es-ES.json"
+                },
+
+                pageLength: 5,
+
+                lengthMenu: [5, 10, 25, 50],
+
+                order: [[4, 'asc']]
+
+            });
+
+        });
+    </script>
+
+</body>
+</html>

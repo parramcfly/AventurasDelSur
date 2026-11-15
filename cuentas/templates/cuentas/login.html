@@ -1,0 +1,88 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Iniciar Sesion | Aventuras del Sur</title>
+
+    <link rel="stylesheet" href="{% static 'cuentas/css/login.css' %}">
+</head>
+
+<body>
+
+    <div class="contenedor">
+
+        <div class="lado-izquierdo">
+
+
+            <h1>Aventuras<br>del Sur</h1>
+
+            <p>
+                Descubre nuevas experiencias,
+                conecta con la naturaleza y
+                vive tu proxima aventura.
+            </p>
+
+
+        </div>
+
+        <div class="lado-derecho">
+
+            <div class="formulario">
+
+                <span class="etiqueta">BIENVENIDO</span>
+
+                <h2>Iniciar Sesion</h2>
+
+                <p class="subtitulo">
+                    Ingresa tus datos para continuar.
+                </p>
+
+                {% if messages %}
+                    {% for mensaje in messages %}
+                        <div class="mensaje">
+                            {{ mensaje }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                <form method="POST">
+
+                    {% csrf_token %}
+
+                    <label>Nombre de usuario</label>
+
+                    <input
+                        type="text"
+                        name="username"
+                        placeholder="Ingresa tu usuario"
+                        required
+                    >
+
+                    <label>Contraseña</label>
+
+                    <input
+                        type="password"
+                        name="password"
+                        placeholder="Ingresa tu contraseña"
+                        required
+                    >
+
+                    <button type="submit">
+                        Ingresar al sistema →
+                    </button>
+
+                </form>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+</html>

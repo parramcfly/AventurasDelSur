@@ -1,0 +1,141 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Mis reservas | Aventuras del Sur</title>
+
+    <link rel="stylesheet" href="{% static 'cuentas/css/panel.css' %}">
+
+    <!-- DataTables -->
+    <link rel="stylesheet"
+        href="https://cdn.datatables.net/1.13.8/css/jquery.dataTables.min.css">
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
+</head>
+
+<body>
+
+    <div class="barra">
+        <h2>Aventuras del Sur</h2>
+
+        {% if rol == 'admin' %}
+            <a href="{% url 'panel_admin' %}">Volver al panel</a>
+        {% elif rol == 'guia' %}
+            <a href="{% url 'panel_guia' %}">Volver al panel</a>
+        {% else %}
+            <a href="{% url 'panel_turista' %}">Volver al panel</a>
+        {% endif %}
+    </div>
+
+    <div class="contenido">
+
+        <span class="etiqueta">RESERVAS E INSCRIPCIONES</span>
+
+        <h1>Gestion de inscripciones</h1>
+
+        <p>Consulta las reservas registradas en Aventuras del Sur.</p>
+
+        {% if messages %}
+            {% for mensaje in messages %}
+                <p class="mensaje">{{ mensaje }}</p>
+            {% endfor %}
+        {% endif %}
+
+        {% if inscripciones %}
+
+            <table id="tablaInscripciones">
+
+                <thead>
+                    <tr>
+
+                        {% if rol != 'turista' %}
+                            <th>Turista</th>
+                        {% endif %}
+
+                        <th>Experiencia</th>
+                        <th>Fecha de inscripcion</th>
+                        <th>Estado de pago</th>
+
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for inscripcion in inscripciones %}
+
+                        <tr>
+
+                            {% if rol != 'turista' %}
+                                <td>{{ inscripcion.usuario.username }}</td>
+                            {% endif %}
+
+                            <td>{{ inscripcion.experiencia.titulo }}</td>
+
+                            <td data-order="{{ inscripcion.fecha_inscripcion|date:'Y-m-d H:i:s' }}">
+                                {{ inscripcion.fecha_inscripcion|date:"d/m/Y H:i" }}
+                            </td>
+
+                            <td>
+
+                                {{ inscripcion.get_estado_pago_display }}
+
+                                {% if rol == 'admin' and inscripcion.estado_pago == 'pendiente' %}
+
+                                    <form method="POST"
+                                        action="{% url 'confirmar_pago' inscripcion.id %}"
+                                        style="display:inline;">
+
+                                        {% csrf_token %}
+
+                                        <button type="submit" class="btn-confirmar">
+                                            Confirmar pago
+                                        </button>
+
+                                    </form>
+
+                                {% endif %}
+
+                            </td>
+
+                        </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        {% else %}
+
+            <p>No hay inscripciones registradas.</p>
+
+        {% endif %}
+
+    </div>
+
+    <script>
+        $(document).ready(function() {
+
+            $('#tablaInscripciones').DataTable({
+
+                language: {
+                    url: "https://cdn.datatables.net/plug-ins/1.13.8/i18n/es-ES.json"
+                },
+
+                pageLength: 5,
+
+                lengthMenu: [5, 10, 25, 50],
+
+                order: [[{% if rol == 'turista' %}1{% else %}2{% endif %}, 'desc']]
+
+            });
+
+        });
+    </script>
+
+</body>
+</html>

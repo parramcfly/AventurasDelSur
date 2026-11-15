@@ -1,0 +1,42 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel Turista</title>
+    <link rel="stylesheet" href="{% static 'cuentas/css/panel.css' %}">
+</head>
+<body>
+
+    <div class="barra">
+        <h2>Aventuras del Sur</h2>
+        <a href="{% url 'logout' %}">Cerrar sesion</a>
+    </div>
+
+    <div class="contenido">
+
+        <span class="etiqueta">TURISTA / CLIENTE</span>
+
+        <h1>Bienvenido, Turista</h1>
+
+        <p>Descubre nuevas actividades y organiza tus proximas aventuras.</p>
+
+        <div class="tarjetas">
+
+            <a href="{% url 'listar_experiencias' %}" class="tarjeta enlace-tarjeta">
+                <h3>Catalogo</h3>
+                <p>Explora las experiencias disponibles.</p>
+            </a>
+
+            <a href="{% url 'listar_inscripciones' %}" class="tarjeta enlace-tarjeta">
+                <h3>Mis reservas</h3>
+                <p>Consulta tus inscripciones y estados de pago.</p>
+            </a>
+
+        </div>
+
+    </div>
+
+</body>
+</html>

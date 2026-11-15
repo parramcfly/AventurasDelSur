@@ -1,0 +1,47 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel Guia</title>
+    <link rel="stylesheet" href="{% static 'cuentas/css/panel.css' %}">
+</head>
+<body>
+
+    <div class="barra">
+        <h2>Aventuras del Sur</h2>
+        <a href="{% url 'logout' %}">Cerrar sesion</a>
+    </div>
+
+    <div class="contenido">
+
+        <span class="etiqueta">GUIA ECOTURISTICO</span>
+
+        <h1>Bienvenido, Guia</h1>
+
+        <p>Desde aqui puedes administrar tus propias experiencias.</p>
+
+        <div class="tarjetas">
+
+            <a href="{% url 'listar_experiencias' %}" class="tarjeta enlace-tarjeta">
+                <h3>Mis experiencias</h3>
+                <p>Consulta las actividades que has registrado.</p>
+            </a>
+
+            <a href="{% url 'crear_experiencia' %}" class="tarjeta enlace-tarjeta">
+                <h3>Nueva experiencia</h3>
+                <p>Registra nuevas actividades para los turistas.</p>
+            </a>
+
+            <div class="tarjeta">
+                <h3>Reservas</h3>
+                <p>Consulta las inscripciones de tus actividades.</p>
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+</html>

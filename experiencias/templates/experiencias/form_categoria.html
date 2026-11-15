@@ -1,0 +1,51 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Formulario de categoria</title>
+    <link rel="stylesheet" href="{% static 'cuentas/css/panel.css' %}">
+</head>
+<body>
+
+    <div class="barra">
+        <h2>Aventuras del Sur</h2>
+        <a href="{% url 'listar_categorias' %}">Volver</a>
+    </div>
+
+    <div class="contenido">
+
+        <h1>
+            {% if categoria %}
+                Editar categoria
+            {% else %}
+                Nueva categoria
+            {% endif %}
+        </h1>
+
+        <form method="POST" class="form-categoria">
+
+            {% csrf_token %}
+
+            <label>Nombre:</label>
+            <input type="text" name="nombre"
+                value="{{ categoria.nombre|default:'' }}" required>
+
+            <label>Descripcion:</label>
+            <textarea name="descripcion" required>{{ categoria.descripcion|default:'' }}</textarea>
+
+            <label>
+                <input type="checkbox" name="estado"
+                    {% if categoria.estado or not categoria %}checked{% endif %}>
+                Categoria activa
+            </label>
+
+            <button type="submit">Guardar categoria</button>
+
+        </form>
+
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,128 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Categorias | Aventuras del Sur</title>
+
+    <link rel="stylesheet" href="{% static 'cuentas/css/panel.css' %}">
+
+    <!-- DataTables -->
+    <link rel="stylesheet"
+          href="https://cdn.datatables.net/1.13.8/css/jquery.dataTables.min.css">
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
+</head>
+
+<body>
+
+    <div class="barra">
+        <h2>Aventuras del Sur</h2>
+        <a href="{% url 'panel_admin' %}">Volver al panel</a>
+    </div>
+
+    <div class="contenido">
+
+        <span class="etiqueta">ADMINISTRACION</span>
+
+        <h1>Gestion de categorias</h1>
+
+        <p>Administra las categorias de las experiencias del ecoparque.</p>
+
+        <a class="boton-crear" href="{% url 'crear_categoria' %}">
+            + Nueva categoria
+        </a>
+
+        {% if messages %}
+            {% for mensaje in messages %}
+                <p class="mensaje">{{ mensaje }}</p>
+            {% endfor %}
+        {% endif %}
+
+        {% if categorias %}
+
+            <table id="tablaCategorias">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Descripcion</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for categoria in categorias %}
+
+                        <tr>
+                            <td>{{ categoria.nombre }}</td>
+
+                            <td>{{ categoria.descripcion }}</td>
+
+                            <td>
+                                {% if categoria.estado %}
+                                    Activa
+                                {% else %}
+                                    Inactiva
+                                {% endif %}
+                            </td>
+
+                            <td>
+                                <a href="{% url 'editar_categoria' categoria.id %}">
+                                    Editar
+                                </a>
+
+                                <form method="POST"
+                                    action="{% url 'eliminar_categoria' categoria.id %}"
+                                    style="display:inline;">
+
+                                    {% csrf_token %}
+
+                                    <button type="submit"
+                                            onclick="return confirm('¿Deseas eliminar esta categoria?')">
+                                        Eliminar
+                                    </button>
+
+                                </form>
+                            </td>
+                        </tr>
+
+                    {% endfor %}
+
+                </tbody>
+            </table>
+
+        {% else %}
+
+            <p>No hay categorias registradas.</p>
+
+        {% endif %}
+
+    </div>
+
+    <script>
+        $(document).ready(function() {
+
+            $('#tablaCategorias').DataTable({
+
+                language: {
+                    url: "https://cdn.datatables.net/plug-ins/1.13.8/i18n/es-ES.json"
+                },
+
+                pageLength: 5,
+
+                lengthMenu: [5, 10, 25, 50],
+
+                order: [[0, 'asc']]
+
+            });
+
+        });
+    </script>
+
+</body>
+</html>

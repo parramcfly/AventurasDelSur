@@ -1,0 +1,91 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Formulario de experiencia</title>
+    <link rel="stylesheet" href="{% static 'cuentas/css/panel.css' %}">
+</head>
+<body>
+
+    <div class="barra">
+        <h2>Aventuras del Sur</h2>
+        <a href="{% url 'listar_experiencias' %}">Volver</a>
+    </div>
+
+    <div class="contenido">
+
+        <h1>
+            {% if experiencia %}
+                Editar experiencia
+            {% else %}
+                Nueva experiencia
+            {% endif %}
+        </h1>
+
+        {% if messages %}
+            {% for mensaje in messages %}
+                <p class="mensaje">{{ mensaje }}</p>
+            {% endfor %}
+        {% endif %}
+
+        <form method="POST" class="form-categoria">
+
+            {% csrf_token %}
+
+            <label>Titulo:</label>
+            <input type="text" name="titulo"
+                value="{{ experiencia.titulo|default:'' }}" required>
+
+            <label>Descripcion:</label>
+            <textarea name="descripcion" required>{{ experiencia.descripcion|default:'' }}</textarea>
+
+            <label>Precio:</label>
+            <input type="number" name="precio" step="0.01" min="0"
+                value="{{ experiencia.precio|default:'' }}" required>
+
+            <label>Cupo maximo:</label>
+            <input type="number" name="cupo_maximo" min="1"
+                value="{{ experiencia.cupo_maximo|default:'' }}" required>
+
+            <label>Fecha y hora:</label>
+            <input type="datetime-local" name="fecha_hora"
+                value="{{ experiencia.fecha_hora|date:'Y-m-d\\TH:i' }}" required>
+
+            <label>Categoria:</label>
+
+            <select name="categoria" required>
+                <option value="">Selecciona una categoria</option>
+
+                {% for categoria in categorias %}
+                    <option value="{{ categoria.id }}"
+                        {% if experiencia.categoria_id == categoria.id %}selected{% endif %}>
+                        {{ categoria.nombre }}
+                    </option>
+                {% endfor %}
+
+            </select>
+
+            <label>Estado:</label>
+
+            <select name="estado">
+                <option value="activa"
+                    {% if not experiencia or experiencia.estado == 'activa' %}selected{% endif %}>
+                    Activa
+                </option>
+
+                <option value="inactiva"
+                    {% if experiencia.estado == 'inactiva' %}selected{% endif %}>
+                    Inactiva
+                </option>
+            </select>
+
+            <button type="submit">Guardar experiencia</button>
+
+        </form>
+
+    </div>
+
+</body>
+</html>
