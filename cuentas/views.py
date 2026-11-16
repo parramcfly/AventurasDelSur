@@ -97,9 +97,6 @@ def cerrar_sesion(request):
     return redirect('login')
 
 
-# --------------------------------
-# GESTION DE USUARIOS
-# --------------------------------
 
 def es_administrador(usuario):
     return Perfil.objects.filter(
