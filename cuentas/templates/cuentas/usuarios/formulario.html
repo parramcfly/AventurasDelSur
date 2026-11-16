@@ -1,0 +1,90 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ accion }} usuario | Aventuras del Sur</title>
+
+    <link rel="stylesheet" href="{% static 'cuentas/css/usuarios.css' %}">
+</head>
+<body>
+
+    <div class="barra">
+        <h2>Aventuras del Sur</h2>
+        <a href="{% url 'listar_usuarios' %}">Volver a usuarios</a>
+    </div>
+
+    <div class="contenido">
+
+        <h1>{{ accion }} usuario</h1>
+        <p>Completa los datos para gestionar la cuenta del usuario.</p>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="mensaje">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <label>Nombre de usuario</label>
+            <input
+                type="text"
+                name="username"
+                value="{{ usuario_editado.username|default:'' }}"
+                required
+            >
+
+            <label>Nombre</label>
+            <input
+                type="text"
+                name="first_name"
+                value="{{ usuario_editado.first_name|default:'' }}"
+            >
+
+            <label>Apellido</label>
+            <input
+                type="text"
+                name="last_name"
+                value="{{ usuario_editado.last_name|default:'' }}"
+            >
+
+            <label>Correo electronico</label>
+            <input
+                type="email"
+                name="email"
+                value="{{ usuario_editado.email|default:'' }}"
+            >
+
+            <label>Contraseña</label>
+            <input
+                type="password"
+                name="password"
+                {% if accion == 'Crear' %}required{% endif %}
+                placeholder="{% if accion == 'Editar' %}Dejar vacio para mantener la actual{% else %}Ingresar contraseña{% endif %}"
+            >
+
+            <label>Rol del usuario</label>
+            <select name="rol" required>
+                {% for valor, nombre in roles %}
+                    <option value="{{ valor }}"
+                        {% if perfil.rol == valor or not perfil and valor == 'turista' %}
+                            selected
+                        {% endif %}
+                    >
+                        {{ nombre }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <button type="submit">
+                {{ accion }} usuario
+            </button>
+        </form>
+
+    </div>
+
+</body>
+</html>
